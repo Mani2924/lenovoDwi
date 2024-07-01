@@ -16,8 +16,6 @@ const { sampleData } = require('../models/index');
 // app express
 const app = express();
 
-
-
 // cors Options
 const corsOptions = {
   origin: '*',
@@ -34,14 +32,11 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '../public')));
 
-
 // home handler
 app.use('/', (req, res, next) => {
   res.response = { code: 404, message: rescodes.notFound };
   next();
 });
-
-
 
 // create schema
 const createSchema = async function () {
@@ -52,8 +47,6 @@ const createSchema = async function () {
   });
 };
 createSchema();
-
-
 
 const httpServer = createServer(app);
 
@@ -67,7 +60,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {});
 });
 
-
 const filePath = path.join(__dirname, '../src/data/sampleData.xlsx');
 const workbook = xlsx.readFile(filePath);
 const sheetName = workbook.SheetNames[0];
@@ -77,7 +69,7 @@ const data = xlsx.utils.sheet_to_json(sheet);
 let rowIndex = 0;
 
 // Function to insert data and update "Op Finish Time"
-function insertDataAndUpdateTime() {
+async function insertDataAndUpdateTime() {
   if (rowIndex >= data.length) {
     console.log('All data inserted.');
     return;
@@ -85,12 +77,21 @@ function insertDataAndUpdateTime() {
 
   const rowData = data[rowIndex];
 
+  const productCount = await uphtarget.count();
+  const currentHour = new Date().getHours();
+  const windowIndex = Math.floor(currentHour / 3);
+  // Determine the index based on windowIndex and productCount
+  const index = windowIndex % productCount; // Ensure index wraps around based on product count
+
+  // Fetch product ID based on the calculated index
+  const product = await uphtarget.findOne({ offset: index });
+
   // Assuming row data is in the correct format
   const newRow = {
     dest_Operation: rowData['Dest Operation'],
     Associate_Id: rowData['Associate Id'],
     Mfg_Order_Id: rowData['Mfg Order Id'],
-    product_id: '21JKS14D00',
+    product_id: product.product_id,
     Serial_Num: rowData['Serial Num'],
     Operation_Id: rowData['Operation Id'],
     Work_Position_Id: rowData['Work Position Id'],
