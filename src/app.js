@@ -109,8 +109,33 @@ function insertDataAndUpdateTime() {
 }
 
 // Schedule the insertion of data every 14 seconds
-cron.schedule('*/30 * * * * *', () => {
-  insertDataAndUpdateTime();
+cron.schedule('*/30 * * * *', () => {
+  const date = new Date();
+  const hour = date.getHours();
+  
+  let recordsToInsert = 0;
+
+  // Determine number of records to insert based on the hour
+  if (hour === 11 || hour === 12) {
+    recordsToInsert = 56; // Morning 11-12
+  } else if (hour === 13 || hour === 14) {
+    recordsToInsert = 25; // Afternoon 1-2
+  } else if (hour === 15 || hour === 16) {
+    recordsToInsert = 60; // 3-4
+  } else if (hour === 19 || hour === 20) {
+    recordsToInsert = 61; // Evening 7-8
+  } else if (hour === 21 || hour === 22) {
+    recordsToInsert = 76; // Night 9-10
+  } else if (hour === 23 || hour === 0) {
+    recordsToInsert = 15; // Night 11-12
+  } else if (hour === 3 || hour === 4) {
+    recordsToInsert = 54; // Morning 3-4
+  }
+
+  // Insert the required number of records
+  for (let i = 0; i < recordsToInsert; i++) {
+    insertDataAndUpdateTime(); // Call your insert function here
+  }
 });
 
 sequelize
