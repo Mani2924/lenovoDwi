@@ -76,7 +76,6 @@ const data = xlsx.utils.sheet_to_json(sheet);
 
 let rowIndex = 0;
 
-// Function to insert data and update "Op Finish Time"
 function insertDataAndUpdateTime() {
   if (rowIndex >= data.length) {
     console.log('All data inserted.');
@@ -108,8 +107,7 @@ function insertDataAndUpdateTime() {
     });
 }
 
-// Schedule the insertion of data every 14 seconds
-cron.schedule('*/30 * * * *', () => {
+cron.schedule('*/30 * * * * *', () => {
   const date = new Date();
   const hour = date.getHours();
   
