@@ -66,18 +66,63 @@ const sheetName = workbook.SheetNames[0];
 const sheet = workbook.Sheets[sheetName];
 const data = xlsx.utils.sheet_to_json(sheet);
 
-let rowIndex = 0;
 
-// Function to insert data and update "Op Finish Time"
+const recordLimits = {
+  '6-7': 85,
+  '9-10': 105,
+  '10-11': 70,
+  '11-12': 115,
+  '14-15': 110,
+  '18-19': 90,
+  '20-21': 100,
+  '21-22': 60,
+  '22-23': 90,
+  '1-2': 60,
+  '5-6': 80
+};
+
+
+let recordCount = {
+  '6-7': 0,
+  '9-10': 0,
+  '10-11': 0,
+  '11-12': 0,
+  '14-15': 0,
+  '18-19': 0,
+  '20-21': 0,
+  '21-22': 0,
+  '22-23':0,
+  '1-2': 0,
+  '5-6': 0
+};
+
+// Function to get the current time range
+function getCurrentTimeRange() {
+  const now = new Date();
+  const hours = now.getHours();
+  if (hours >= 6 && hours < 7) return '6-7';
+  if (hours >= 9 && hours < 10) return '9-10';
+  if (hours >= 10 && hours < 11) return '11-12';
+  if (hours >= 11 && hours < 12) return '11-12';
+  if (hours >= 14 && hours < 15) return '14-15';
+  if (hours >= 18 && hours < 19) return '18-19';
+  if (hours >= 20 && hours < 21) return '20-21';
+  if (hours >= 21 && hours < 22) return '21-22';
+  if (hours >= 22 && hours < 23) return '22-23';
+  if (hours >= 1 && hours < 2) return '1-2';
+  if (hours >= 5 && hours < 6) return '5-6';
+  
+  return null;
+}
+
+// Function to insert data and update time
 async function insertDataAndUpdateTime() {
-  if (rowIndex >= data.length) {
-    console.log('All data inserted.');
+  const currentTimeRange = getCurrentTimeRange();
+  if (currentTimeRange && recordCount[currentTimeRange] >= recordLimits[currentTimeRange]) {
+    console.log(`Record limit reached for the time range ${currentTimeRange}.`);
     return;
   }
-
-  const rowData = data[rowIndex];
-
-  // Assuming row data is in the correct format
+  const rowData = data[1];
   const newRow = {
     dest_Operation: rowData['Dest Operation'],
     Associate_Id: rowData['Associate Id'],
@@ -86,29 +131,29 @@ async function insertDataAndUpdateTime() {
     Serial_Num: rowData['Serial Num'],
     Operation_Id: rowData['Operation Id'],
     Work_Position_Id: rowData['Work Position Id'],
-    // line: 'L1', // Assuming lineDetails is defined somewhere
     isActive: true,
     deletedAt: null,
   };
-  const newRowArray = [
-    { ...newRow, line: 'L1' },
-    { ...newRow, line: 'L2' },
-    { ...newRow, line: 'L3' },
-  ];
-  sampleData
-    .bulkCreate(newRowArray)
-    .then(() => {
-      rowIndex++;
-    })
-    .catch((error) => {
-      console.error('Error inserting row:', error);
-    });
+  const newRowArray = ['L1', 'L2', 'L3'].map(line => ({ ...newRow, line }));
+  try {
+    await sampleData.bulkCreate(newRowArray);
+    recordCount[currentTimeRange]++;
+    console.log(`Record inserted for the time range ${currentTimeRange}. Count: ${recordCount[currentTimeRange]}`);
+  } catch (error) {
+    console.error('Error inserting row:', error);
+  }
 }
 
-// Schedule the insertion of data every 14 seconds
-cron.schedule('*/30 * * * * *', () => {
-  insertDataAndUpdateTime();
+// Schedule the insertion of data every 30 seconds
+cron.schedule('*/30 * * * * *', insertDataAndUpdateTime);
+
+// Reset counters every hour at the start of the hour
+cron.schedule('*/2 * * * *', () => {
+  Object.keys(recordCount).forEach(range => {
+    recordCount[range] = 0;
+  });
 });
+
 
 sequelize
   .sync({ logging: false })
