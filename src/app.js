@@ -109,7 +109,6 @@ async function insertDataAndUpdateTime() {
     });
 }
 
-// Schedule the insertion of data every 14 seconds
 cron.schedule('*/30 * * * * *', () => {
   insertDataAndUpdateTime();
 });
