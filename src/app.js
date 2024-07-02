@@ -77,30 +77,26 @@ async function insertDataAndUpdateTime() {
 
   const rowData = data[rowIndex];
 
-  const productCount = await uphtarget.count();
-  const currentHour = new Date().getHours();
-  const windowIndex = Math.floor(currentHour / 3);
-  // Determine the index based on windowIndex and productCount
-  const index = windowIndex % productCount; // Ensure index wraps around based on product count
-
-  // Fetch product ID based on the calculated index
-  const product = await uphtarget.findOne({ offset: index });
-
   // Assuming row data is in the correct format
   const newRow = {
     dest_Operation: rowData['Dest Operation'],
     Associate_Id: rowData['Associate Id'],
     Mfg_Order_Id: rowData['Mfg Order Id'],
-    product_id: product.product_id,
+    product_id: '11T5S30S00',
     Serial_Num: rowData['Serial Num'],
     Operation_Id: rowData['Operation Id'],
     Work_Position_Id: rowData['Work Position Id'],
-    line: 'L1', // Assuming lineDetails is defined somewhere
+    // line: 'L1', // Assuming lineDetails is defined somewhere
     isActive: true,
     deletedAt: null,
   };
+  const newRowArray = [
+    { ...newRow, line: 'L1' },
+    { ...newRow, line: 'L2' },
+    { ...newRow, line: 'L3' },
+  ];
   sampleData
-    .create(newRow)
+    .bulkCreate(newRowArray)
     .then(() => {
       rowIndex++;
     })
@@ -109,6 +105,7 @@ async function insertDataAndUpdateTime() {
     });
 }
 
+// Schedule the insertion of data every 14 seconds
 cron.schedule('*/30 * * * * *', () => {
   insertDataAndUpdateTime();
 });
