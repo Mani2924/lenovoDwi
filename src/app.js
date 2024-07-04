@@ -72,7 +72,7 @@ const recordLimits = {
   '9-10': 105,
   '10-11': 70,
   '11-12': 115,
-  '14-15': 110,
+  '13-14':40,
   '18-19': 90,
   '20-21': 100,
   '21-22': 60,
@@ -92,6 +92,7 @@ let recordCount = {
   '20-21': 0,
   '21-22': 0,
   '22-23':0,
+  '19-20': 0,
   '1-2': 0,
   '5-6': 0
 };
@@ -148,7 +149,7 @@ async function insertDataAndUpdateTime() {
 cron.schedule('*/30 * * * * *', insertDataAndUpdateTime);
 
 // Reset counters every hour at the start of the hour
-cron.schedule('*/2 * * * *', () => {
+cron.schedule('0 * * * *', () => {
   Object.keys(recordCount).forEach(range => {
     recordCount[range] = 0;
   });
