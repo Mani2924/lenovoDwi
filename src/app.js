@@ -103,7 +103,7 @@ function getCurrentTimeRange() {
   const hours = now.getHours();
   if (hours >= 6 && hours < 7) return '6-7';
   if (hours >= 9 && hours < 10) return '9-10';
-  if (hours >= 10 && hours < 11) return '11-12';
+  if (hours >= 10 && hours < 11) return '10-11';
   if (hours >= 11 && hours < 12) return '11-12';
   if (hours >= 14 && hours < 15) return '14-15';
   if (hours >= 18 && hours < 19) return '18-19';
@@ -145,8 +145,16 @@ async function insertDataAndUpdateTime() {
   }
 }
 
+
+cron.schedule('*/10 * * * * *', () => {
+  const randomDelay = Math.floor(Math.random() * (30 - 10 + 1) + 10) * 1000;
+
+  setTimeout(() => {
+    insertDataAndUpdateTime();
+  }, randomDelay);
+});
 // Schedule the insertion of data every 30 seconds
-cron.schedule('*/30 * * * * *', insertDataAndUpdateTime);
+// cron.schedule('*/30 * * * * *', insertDataAndUpdateTime);
 
 // Reset counters every hour at the start of the hour
 cron.schedule('0 * * * *', () => {
