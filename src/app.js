@@ -116,6 +116,22 @@ function getCurrentTimeRange() {
   return null;
 }
 
+function getRandomLines(lines) {
+  const selectedLines = [];
+  const numLines = Math.floor(Math.random() * lines.length) + 1; // Random number between 1 and lines.length
+
+  while (selectedLines.length < numLines) {
+    const randomIndex = Math.floor(Math.random() * lines.length);
+    const selectedLine = lines[randomIndex];
+    if (!selectedLines.includes(selectedLine)) {
+      selectedLines.push(selectedLine);
+    }
+  }
+
+  return selectedLines;
+}
+
+
 // Function to insert data and update time
 async function insertDataAndUpdateTime() {
   const currentTimeRange = getCurrentTimeRange();
@@ -135,7 +151,10 @@ async function insertDataAndUpdateTime() {
     isActive: true,
     deletedAt: null,
   };
-  const newRowArray = ['L1', 'L2', 'L3'].map(line => ({ ...newRow, line }));
+
+  const lines = ['L1', 'L2', 'L3'];
+  const selectedLines = getRandomLines(lines);
+  const newRowArray = selectedLines.map(line => ({ ...newRow, line }));
   try {
     await sampleData.bulkCreate(newRowArray);
     recordCount[currentTimeRange]++;
