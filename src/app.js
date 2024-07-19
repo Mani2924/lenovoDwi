@@ -68,30 +68,30 @@ const data = xlsx.utils.sheet_to_json(sheet);
 
 
 const recordLimits = {
-  '0-1': 200,
-  '1-2': 200,
-  '2-3': 200,
-  '3-4': 200,
-  '4-5': 200,
-  '5-6': 200,
-  '6-7': 200,
-  '7-8': 200,      // Added this range
-  '8-9': 200,      // Added this range
-  '9-10': 200,
-  '10-11': 200,
+  '0-1': 140,
+  '1-2': 140,
+  '2-3': 140,
+  '3-4': 140,
+  '4-5': 140,
+  '5-6': 140,
+  '6-7': 140,
+  '7-8': 140,      // Added this range
+  '8-9': 140,      // Added this range
+  '9-10': 140,
+  '10-11': 140,
   '11-12': 120,
   '12-13': 120,    // Added this range
   '13-14': 120,
   '14-15': 120,    // Added this range
   '15-16': 120,    // Added this range
   '16-17': 120,    // Added this range
-  '17-18': 200,    // Added this range
-  '18-19': 200,
-  '19-20': 200,    // Added this range
-  '20-21': 200,
-  '21-22': 200,
-  '22-23': 200,
-  '23-24': 200     // Added this range
+  '17-18': 140,    // Added this range
+  '18-19': 140,
+  '19-20': 140,    // Added this range
+  '20-21': 140,
+  '21-22': 140,
+  '22-23': 140,
+  '23-24': 140     // Added this range
 };
 
 let recordCount = {
