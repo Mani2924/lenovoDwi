@@ -68,51 +68,89 @@ const data = xlsx.utils.sheet_to_json(sheet);
 
 
 const recordLimits = {
+  '0-1': 120,
+  '1-2': 120,
+  '2-3': 120,
+  '3-4': 120,
+  '4-5': 120,
+  '5-6': 120,
   '6-7': 120,
+  '7-8': 120,      // Added this range
+  '8-9': 120,      // Added this range
   '9-10': 120,
   '10-11': 120,
   '11-12': 120,
-  '13-14':120,
+  '12-13': 120,    // Added this range
+  '13-14': 120,
+  '14-15': 120,    // Added this range
+  '15-16': 120,    // Added this range
+  '16-17': 120,    // Added this range
+  '17-18': 120,    // Added this range
   '18-19': 120,
+  '19-20': 120,    // Added this range
   '20-21': 100,
   '21-22': 120,
   '22-23': 120,
-  '1-2': 120,
-  '5-6': 120
+  '23-24': 120     // Added this range
 };
 
-
 let recordCount = {
+  '0-1': 0,
+  '1-2': 0,
+  '2-3': 0,
+  '3-4': 0,
+  '4-5': 0,
+  '5-6': 0,
   '6-7': 0,
+  '7-8': 0,       // Added this range
+  '8-9': 0,       // Added this range
   '9-10': 0,
   '10-11': 0,
   '11-12': 0,
-  '14-15': 0,
+  '12-13': 0,     // Added this range
+  '13-14': 0,
+  '14-15': 0,     // Added this range
+  '15-16': 0,     // Added this range
+  '16-17': 0,     // Added this range
+  '17-18': 0,     // Added this range
   '18-19': 0,
+  '19-20': 0,     // Added this range
   '20-21': 0,
   '21-22': 0,
-  '22-23':0,
-  '19-20': 0,
-  '1-2': 0,
-  '5-6': 0
+  '22-23': 0,
+  '23-24': 0      // Added this range
 };
 
 // Function to get the current time range
 function getCurrentTimeRange() {
   const now = new Date();
   const hours = now.getHours();
+  
+  if (hours >= 0 && hours < 1) return '0-1';
+  if (hours >= 1 && hours < 2) return '1-2';
+  if (hours >= 2 && hours < 3) return '2-3';
+  if (hours >= 3 && hours < 4) return '3-4';
+  if (hours >= 4 && hours < 5) return '4-5';
+  if (hours >= 5 && hours < 6) return '5-6';
   if (hours >= 6 && hours < 7) return '6-7';
+  if (hours >= 7 && hours < 8) return '7-8';
+  if (hours >= 8 && hours < 9) return '8-9';
   if (hours >= 9 && hours < 10) return '9-10';
   if (hours >= 10 && hours < 11) return '10-11';
   if (hours >= 11 && hours < 12) return '11-12';
+  if (hours >= 12 && hours < 13) return '12-13';
+  if (hours >= 13 && hours < 14) return '13-14';
   if (hours >= 14 && hours < 15) return '14-15';
+  if (hours >= 15 && hours < 16) return '15-16';
+  if (hours >= 16 && hours < 17) return '16-17';
+  if (hours >= 17 && hours < 18) return '17-18';
   if (hours >= 18 && hours < 19) return '18-19';
+  if (hours >= 19 && hours < 20) return '19-20';
   if (hours >= 20 && hours < 21) return '20-21';
   if (hours >= 21 && hours < 22) return '21-22';
   if (hours >= 22 && hours < 23) return '22-23';
-  if (hours >= 1 && hours < 2) return '1-2';
-  if (hours >= 5 && hours < 6) return '5-6';
-  
+  if (hours >= 23 && hours < 24) return '23-24';
+
   return null;
 }
 
