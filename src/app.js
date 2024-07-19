@@ -203,11 +203,8 @@ async function insertDataAndUpdateTime() {
 }
 
 
-cron.schedule('*/10 * * * * *', () => {
-  const randomDelay = Math.floor(Math.random() * (40 - 30 + 1) + 30) * 1000;
-  setTimeout(() => {
+cron.schedule('*/30 * * * * *', () => {
     insertDataAndUpdateTime();
-  }, randomDelay);
 });
 // Schedule the insertion of data every 30 seconds
 // cron.schedule('*/30 * * * * *', insertDataAndUpdateTime);
