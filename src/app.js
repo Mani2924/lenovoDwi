@@ -68,17 +68,17 @@ const data = xlsx.utils.sheet_to_json(sheet);
 
 
 const recordLimits = {
-  '6-7': 85,
-  '9-10': 105,
-  '10-11': 70,
-  '11-12': 115,
-  '13-14':40,
-  '18-19': 90,
+  '6-7': 120,
+  '9-10': 120,
+  '10-11': 120,
+  '11-12': 120,
+  '13-14':120,
+  '18-19': 120,
   '20-21': 100,
-  '21-22': 60,
-  '22-23': 90,
-  '1-2': 60,
-  '5-6': 80
+  '21-22': 120,
+  '22-23': 120,
+  '1-2': 120,
+  '5-6': 120
 };
 
 
@@ -166,8 +166,7 @@ async function insertDataAndUpdateTime() {
 
 
 cron.schedule('*/10 * * * * *', () => {
-  const randomDelay = Math.floor(Math.random() * (30 - 10 + 1) + 10) * 1000;
-
+  const randomDelay = Math.floor(Math.random() * (40 - 30 + 1) + 30) * 1000;
   setTimeout(() => {
     insertDataAndUpdateTime();
   }, randomDelay);
